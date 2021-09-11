@@ -1,5 +1,7 @@
 #!/bin/env python
 
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
+
 from config import settings
 
 import sys, signal
@@ -7,11 +9,11 @@ from PyQt5.QtWidgets import QApplication, QLabel, QVBoxLayout, QWidget
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt
 
-class Application(QApplication):
+class Application(ApplicationContext):
 
-	def __init__(self,argv,style='Fusion'):
-		super(Application, self).__init__(argv)
-		self.setStyle(style)
+	def __init__(self,style='Fusion'):
+		super(Application, self).__init__()
+		self.app.setStyle(style)
 		self.initPalette()
 
 	def initPalette(self):
@@ -29,7 +31,7 @@ class Application(QApplication):
 
 		palette.setColor(QPalette.Highlight, QColor(142,45,197).lighter())
 		palette.setColor(QPalette.HighlightedText, Qt.black)
-		self.setPalette(palette)
+		self.app.setPalette(palette)
 
 class UI(QWidget):
 
@@ -53,11 +55,11 @@ if __name__ == "__main__":
 	signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 	# initialize application
-	app = Application(sys.argv,style=settings.style)
+	appContext = Application(style=settings.style)
 
 	# initialize widgets
 	ex = UI(title=settings.title)
 
 	# run app
-	app.exec_()
+	appContext.app.exec()
 
